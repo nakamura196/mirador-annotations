@@ -10,6 +10,7 @@ import SingleCanvasDialog from '../SingleCanvasDialog';
 import AnnotationExportDialog from '../AnnotationExportDialog';
 import LocalStorageAdapter from '../LocalStorageAdapter';
 import GoogleAuthButton from '../GoogleAuthButton';
+import FirestoreAnnotationAdapter from '../FirestoreAnnotationAdapter';
 /** */
 class MiradorAnnotation extends Component {
   /** */
@@ -64,7 +65,7 @@ class MiradorAnnotation extends Component {
     } = this.props;
     const { annotationExportDialogOpen, singleCanvasDialogOpen } = this.state;
     const storageAdapter = config.annotation && config.annotation.adapter('poke');
-    const offerExportDialog = config.annotation && storageAdapter instanceof LocalStorageAdapter
+    const offerExportDialog = config.annotation && (storageAdapter instanceof LocalStorageAdapter || storageAdapter instanceof FirestoreAnnotationAdapter)
       && config.annotation.exportLocalStorageAnnotations;
     return (
       <div>

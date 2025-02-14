@@ -16,7 +16,7 @@ const config = {
       const manifestId = config.windows[0].loadedManifest;
       return new FirestoreAnnotationAdapter(canvasId, manifestId);
     },
-    exportLocalStorageAnnotations: false,
+    exportLocalStorageAnnotations: true,
   },
   id: 'demo',
   window: {

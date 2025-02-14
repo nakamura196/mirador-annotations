@@ -61,7 +61,6 @@ export default class FirestoreAnnotationAdapter {
       id: docRef.id,
       manifestId: this.manifestId,
       modified: new Date(),
-      userEmail: user.email,
       userId: user.uid,
       userName: user.displayName,
     };
