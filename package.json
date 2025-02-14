@@ -11,11 +11,11 @@
     "umd"
   ],
   "scripts": {
-    "build": "nwb build-react-component",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && nwb build-react-component",
     "clean": "nwb clean-module && nwb clean-demo",
     "lint": "eslint ./src ./__tests__",
     "prepublishOnly": "npm run build",
-    "start": "nwb serve-react-demo",
+    "start": "export NODE_OPTIONS=--openssl-legacy-provider && nwb serve-react-demo",
     "test": "npm run lint && jest",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch"
