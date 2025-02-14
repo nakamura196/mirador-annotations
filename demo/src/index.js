@@ -5,12 +5,10 @@ import annotationPlugins from '../../src';
 
 // const endpointUrl = 'http://127.0.0.1:3000/annotations';
 import FirestoreAnnotationAdapter from '../../src/FirestoreAnnotationAdapter';
-// Firebase初期化
-FirestoreAnnotationAdapter.initialize();
 
 // URLからmanifestパラメータを取得
 const urlParams = new URLSearchParams(window.location.search);
-const manifestUrl = urlParams.get('manifest') || 'https://iiif.harvardartmuseums.org/manifests/object/299843'; // デフォルト値
+const manifestUrl = urlParams.get('manifest') || 'https://dl.ndl.go.jp/api/iiif/3437686/manifest.json'; // デフォルト値
 
 const config = {
   annotation: {
