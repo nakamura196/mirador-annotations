@@ -11,6 +11,8 @@ const envKeys = Object.keys(env).reduce((prev, next) => ({
   [`process.env.${next}`]: JSON.stringify(env[next]),
 }), {});
 
+console.log(envKeys);
+
 module.exports = {
   npm: {
     esModules: true,
