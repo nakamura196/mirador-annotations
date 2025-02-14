@@ -9,7 +9,7 @@ import { getVisibleCanvases } from 'mirador/dist/es/src/state/selectors/canvases
 import SingleCanvasDialog from '../SingleCanvasDialog';
 import AnnotationExportDialog from '../AnnotationExportDialog';
 import LocalStorageAdapter from '../LocalStorageAdapter';
-
+import GoogleAuthButton from '../GoogleAuthButton';
 /** */
 class MiradorAnnotation extends Component {
   /** */
@@ -71,6 +71,10 @@ class MiradorAnnotation extends Component {
         <TargetComponent
           {...targetProps} // eslint-disable-line react/jsx-props-no-spreading
         />
+        <GoogleAuthButton
+          canvases={canvases}
+          config={config}
+        />
         <MiradorMenuButton
           aria-label="Create new annotation"
           onClick={windowViewType === 'single' ? this.openCreateAnnotationCompanionWindow : this.toggleSingleCanvasDialogOpen}
@@ -78,6 +82,7 @@ class MiradorAnnotation extends Component {
         >
           <AddBoxIcon />
         </MiradorMenuButton>
+
         { singleCanvasDialogOpen && (
           <SingleCanvasDialog
             open={singleCanvasDialogOpen}
@@ -144,10 +149,12 @@ const mapStateToProps = (state, { targetProps: { windowId } }) => ({
   windowViewType: getWindowViewType(state, { windowId }),
 });
 
-export default {
+const plugin = {
   component: MiradorAnnotation,
   mapDispatchToProps,
   mapStateToProps,
   mode: 'wrap',
   target: 'AnnotationSettings',
 };
+
+export default plugin;
