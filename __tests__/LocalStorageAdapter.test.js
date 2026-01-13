@@ -1,3 +1,6 @@
+import {
+  describe, it, expect, beforeEach,
+} from 'vitest';
 import LocalStorageAdapter from '../src/LocalStorageAdapter';
 import fixture from '../__fixtures__/web_annotation.json';
 

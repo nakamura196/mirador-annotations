@@ -21,7 +21,7 @@
     "lint": "npx eslint ./",
     "prepublishOnly": "npm run build",
     "start": "vite",
-    "test": "npm run lint",
+    "test": "npm run lint && npx vitest run",
     "test:coverage": "npm run lint && npx vitest run --coverage",
     "build:demo": "GITHUB_PAGES=true npm run build",
     "preview": "vite preview"

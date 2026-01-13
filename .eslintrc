@@ -1,5 +1,5 @@
 {
-  "ignorePatterns": ["dist/**", "node_modules/**", "__tests__/**"],
+  "ignorePatterns": ["dist/**", "node_modules/**", "__tests__/**", "vitest.config.js", "vitest.setup.js"],
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module",
