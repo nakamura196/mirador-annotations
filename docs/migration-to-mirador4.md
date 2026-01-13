@@ -244,6 +244,12 @@ resolve: {
 
 どちらも、ライブラリの内部実装を理解することで解決できました。移行作業では、エラーメッセージだけでなく、ライブラリのソースコードを確認することが重要です。
 
+## デモ
+
+移行後の動作は以下のデモサイトで試すことができます：
+
+https://nakamura196.github.io/mirador-annotations/
+
 ## 参考リンク
 
 - [Mirador](https://projectmirador.org/)
