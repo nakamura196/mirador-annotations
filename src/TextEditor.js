@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Editor, EditorState, RichUtils } from 'draft-js';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import BoldIcon from '@material-ui/icons/FormatBold';
-import ItalicIcon from '@material-ui/icons/FormatItalic';
-import { withStyles } from '@material-ui/core/styles';
+import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { FormatBold as BoldIcon, FormatItalic as ItalicIcon } from '@mui/icons-material';
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
 
@@ -65,7 +62,6 @@ class TextEditor extends Component {
 
   /** */
   render() {
-    const { classes } = this.props;
     const { editorState } = this.state;
     const currentStyle = editorState.getCurrentInlineStyle();
 
@@ -89,39 +85,33 @@ class TextEditor extends Component {
           </ToggleButton>
         </ToggleButtonGroup>
 
-        <div className={classes.editorRoot} onClick={this.handleFocus}>
+        <Box
+          onClick={this.handleFocus}
+          sx={{
+            border: 1,
+            borderColor: (theme) => theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)',
+            borderRadius: 1,
+            fontFamily: 'inherit',
+            mb: 1,
+            minHeight: 96,
+            mt: 1,
+            p: 1,
+          }}
+        >
           <Editor
             editorState={editorState}
             handleKeyCommand={this.handleKeyCommand}
             onChange={this.onChange}
             ref={this.editorRef}
           />
-        </div>
+        </Box>
       </div>
     );
   }
 }
 
-/** */
-const styles = (theme) => ({
-  editorRoot: {
-    borderColor: theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)',
-    borderRadius: theme.shape.borderRadius,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    fontFamily: theme.typography.fontFamily,
-    marginBottom: theme.spacing(1),
-    marginTop: theme.spacing(1),
-    minHeight: theme.typography.fontSize * 6,
-    padding: theme.spacing(1),
-  },
-});
-
 TextEditor.propTypes = {
   annoHtml: PropTypes.string,
-  classes: PropTypes.shape({
-    editorRoot: PropTypes.string,
-  }).isRequired,
   updateAnnotationBody: PropTypes.func,
 };
 
@@ -130,4 +120,4 @@ TextEditor.defaultProps = {
   updateAnnotationBody: () => {},
 };
 
-export default withStyles(styles)(TextEditor);
+export default TextEditor;

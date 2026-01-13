@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import * as actions from 'mirador/dist/es/src/state/actions';
-import { getWindowViewType } from 'mirador/dist/es/src/state/selectors';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import { MiradorMenuButton } from 'mirador/dist/es/src/components/MiradorMenuButton';
-import { getVisibleCanvases } from 'mirador/dist/es/src/state/selectors/canvases';
+import {
+  addCompanionWindow,
+  getVisibleCanvases,
+  getWindowViewType,
+  MiradorMenuButton,
+  setWindowViewType,
+} from 'mirador';
+import { AddBox as AddBoxIcon, GetApp as GetAppIcon } from '@mui/icons-material';
 import SingleCanvasDialog from '../SingleCanvasDialog';
 import AnnotationExportDialog from '../AnnotationExportDialog';
 import LocalStorageAdapter from '../LocalStorageAdapter';
 import GoogleAuthButton from '../GoogleAuthButton';
 import FirestoreAnnotationAdapter from '../FirestoreAnnotationAdapter';
+
 /** */
 class MiradorAnnotation extends Component {
   /** */
@@ -28,10 +31,10 @@ class MiradorAnnotation extends Component {
   /** */
   openCreateAnnotationCompanionWindow(e) {
     const {
-      addCompanionWindow,
+      addCompanionWindow: addWindow,
     } = this.props;
 
-    addCompanionWindow('annotationCreation', {
+    addWindow('annotationCreation', {
       position: 'right',
     });
   }
@@ -136,10 +139,10 @@ MiradorAnnotation.propTypes = {
 /** */
 const mapDispatchToProps = (dispatch, props) => ({
   addCompanionWindow: (content, additionalProps) => dispatch(
-    actions.addCompanionWindow(props.targetProps.windowId, { content, ...additionalProps }),
+    addCompanionWindow(props.targetProps.windowId, { content, ...additionalProps }),
   ),
   switchToSingleCanvasView: () => dispatch(
-    actions.setWindowViewType(props.targetProps.windowId, 'single'),
+    setWindowViewType(props.targetProps.windowId, 'single'),
   ),
 });
 

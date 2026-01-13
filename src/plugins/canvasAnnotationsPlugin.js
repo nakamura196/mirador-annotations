@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { getVisibleCanvases } from 'mirador/dist/es/src/state/selectors/canvases';
-import * as actions from 'mirador/dist/es/src/state/actions';
-import { getWindowViewType } from 'mirador/dist/es/src/state/selectors';
+import {
+  addCompanionWindow,
+  getVisibleCanvases,
+  getWindowViewType,
+  receiveAnnotation,
+  setWindowViewType,
+} from 'mirador';
 import CanvasListItem from '../CanvasListItem';
 import AnnotationActionsContext from '../AnnotationActionsContext';
 import SingleCanvasDialog from '../SingleCanvasDialog';
@@ -29,7 +33,7 @@ class CanvasAnnotationsWrapper extends Component {
   /** */
   render() {
     const {
-      addCompanionWindow, annotationsOnCanvases, canvases, config, receiveAnnotation,
+      addCompanionWindow: addWindow, annotationsOnCanvases, canvases, config, receiveAnnotation: receiveAnno,
       switchToSingleCanvasView, TargetComponent, targetProps, windowViewType,
     } = this.props;
     const { singleCanvasDialogOpen } = this.state;
@@ -40,11 +44,11 @@ class CanvasAnnotationsWrapper extends Component {
     return (
       <AnnotationActionsContext.Provider
         value={{
-          addCompanionWindow,
+          addCompanionWindow: addWindow,
           annotationsOnCanvases,
           canvases,
           config,
-          receiveAnnotation,
+          receiveAnnotation: receiveAnno,
           storageAdapter: config.annotation.adapter,
           toggleSingleCanvasDialogOpen: this.toggleSingleCanvasDialogOpen,
           windowId: targetProps.windowId,
@@ -114,13 +118,13 @@ function mapStateToProps(state, { targetProps: { windowId } }) {
 /** */
 const mapDispatchToProps = (dispatch, props) => ({
   addCompanionWindow: (content, additionalProps) => dispatch(
-    actions.addCompanionWindow(props.targetProps.windowId, { content, ...additionalProps }),
+    addCompanionWindow(props.targetProps.windowId, { content, ...additionalProps }),
   ),
   receiveAnnotation: (targetId, id, annotation) => dispatch(
-    actions.receiveAnnotation(targetId, id, annotation),
+    receiveAnnotation(targetId, id, annotation),
   ),
   switchToSingleCanvasView: () => dispatch(
-    actions.setWindowViewType(props.targetProps.windowId, 'single'),
+    setWindowViewType(props.targetProps.windowId, 'single'),
   ),
 });
 

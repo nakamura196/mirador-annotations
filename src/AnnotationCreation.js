@@ -1,31 +1,34 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import RectangleIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CircleIcon from '@material-ui/icons/RadioButtonUnchecked';
-import PolygonIcon from '@material-ui/icons/Timeline';
-import GestureIcon from '@material-ui/icons/Gesture';
-import ClosedPolygonIcon from '@material-ui/icons/ChangeHistory';
-import OpenPolygonIcon from '@material-ui/icons/ShowChart';
-import FormatColorFillIcon from '@material-ui/icons/FormatColorFill';
-import StrokeColorIcon from '@material-ui/icons/BorderColor';
-import LineWeightIcon from '@material-ui/icons/LineWeight';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import FormatShapesIcon from '@material-ui/icons/FormatShapes';
-import Popover from '@material-ui/core/Popover';
-import Divider from '@material-ui/core/Divider';
-import MenuItem from '@material-ui/core/MenuItem';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import MenuList from '@material-ui/core/MenuList';
+import {
+  Button,
+  ClickAwayListener,
+  Divider,
+  Grid,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popover,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from '@mui/material';
+import {
+  ArrowDropDown as ArrowDropDownIcon,
+  BorderColor as StrokeColorIcon,
+  ChangeHistory as ClosedPolygonIcon,
+  CheckBoxOutlineBlank as RectangleIcon,
+  FormatColorFill as FormatColorFillIcon,
+  FormatShapes as FormatShapesIcon,
+  Gesture as GestureIcon,
+  LineWeight as LineWeightIcon,
+  RadioButtonUnchecked as CircleIcon,
+  ShowChart as OpenPolygonIcon,
+  Timeline as PolygonIcon,
+} from '@mui/icons-material';
 import { SketchPicker } from 'react-color';
 import { v4 as uuid } from 'uuid';
-import { withStyles } from '@material-ui/core/styles';
-import CompanionWindow from 'mirador/dist/es/src/containers/CompanionWindow';
+import { ConnectedCompanionWindow as CompanionWindow } from 'mirador';
 import AnnotationDrawing from './AnnotationDrawing';
 import TextEditor from './TextEditor';
 import WebAnnotation from './WebAnnotation';
@@ -220,7 +223,7 @@ class AnnotationCreation extends Component {
   /** */
   render() {
     const {
-      annotation, classes, closeCompanionWindow, id, windowId,
+      annotation, closeCompanionWindow, direction, id, position, windowId,
     } = this.props;
 
     const {
@@ -233,6 +236,8 @@ class AnnotationCreation extends Component {
         title={annotation ? 'Edit annotation' : 'New annotation'}
         windowId={windowId}
         id={id}
+        direction={direction}
+        position={position}
       >
         <AnnotationDrawing
           activeTool={activeTool}
@@ -244,17 +249,17 @@ class AnnotationCreation extends Component {
           updateGeometry={this.updateGeometry}
           windowId={windowId}
         />
-        <form onSubmit={this.submitForm} className={classes.section}>
+        <form onSubmit={this.submitForm} style={{ paddingBottom: 8, paddingLeft: 16, paddingRight: 8, paddingTop: 16 }}>
           <Grid container>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Typography variant="overline">
                 Target
               </Typography>
             </Grid>
-            <Grid item xs={12}>
-              <Paper elevation={0} className={classes.paper}>
+            <Grid size={12}>
+              <Paper elevation={0} sx={{ display: 'flex', flexWrap: 'wrap' }}>
                 <ToggleButtonGroup
-                  className={classes.grouped}
+                  sx={{ border: 'none', m: 0.5, '& .MuiToggleButtonGroup-grouped': { borderRadius: 1 } }}
                   value={activeTool}
                   exclusive
                   onChange={this.changeTool}
@@ -268,9 +273,9 @@ class AnnotationCreation extends Component {
                     <FormatShapesIcon />
                   </ToggleButton>
                 </ToggleButtonGroup>
-                <Divider flexItem orientation="vertical" className={classes.divider} />
+                <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
                 <ToggleButtonGroup
-                  className={classes.grouped}
+                  sx={{ border: 'none', m: 0.5, '& .MuiToggleButtonGroup-grouped': { borderRadius: 1 } }}
                   value={activeTool}
                   exclusive
                   onChange={this.changeTool}
@@ -294,12 +299,12 @@ class AnnotationCreation extends Component {
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Typography variant="overline">
                 Style
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <ToggleButtonGroup
                 aria-label="style selection"
                 size="small"
@@ -330,7 +335,7 @@ class AnnotationCreation extends Component {
                 </ToggleButton>
               </ToggleButtonGroup>
 
-              <Divider flexItem orientation="vertical" className={classes.divider} />
+              <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
               { /* close / open polygon mode only for freehand drawing mode. */
                 activeTool === 'freehand'
                   ? (
@@ -353,12 +358,12 @@ class AnnotationCreation extends Component {
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Typography variant="overline">
                 Content
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextEditor
                 key={textEditorStateBustingKey}
                 annoHtml={annoBody}
@@ -412,39 +417,11 @@ class AnnotationCreation extends Component {
   }
 }
 
-/** */
-const styles = (theme) => ({
-  divider: {
-    margin: theme.spacing(1, 0.5),
-  },
-  grouped: {
-    '&:first-child': {
-      borderRadius: theme.shape.borderRadius,
-    },
-    '&:not(:first-child)': {
-      borderRadius: theme.shape.borderRadius,
-    },
-    border: 'none',
-    margin: theme.spacing(0.5),
-  },
-  paper: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  section: {
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    paddingTop: theme.spacing(2),
-  },
-});
-
 AnnotationCreation.propTypes = {
   annotation: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   canvases: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string, index: PropTypes.number }),
   ),
-  classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   closeCompanionWindow: PropTypes.func,
   config: PropTypes.shape({
     annotation: PropTypes.shape({
@@ -456,7 +433,9 @@ AnnotationCreation.propTypes = {
       ),
     }),
   }).isRequired,
+  direction: PropTypes.string,
   id: PropTypes.string.isRequired,
+  position: PropTypes.string,
   receiveAnnotation: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };
@@ -465,6 +444,8 @@ AnnotationCreation.defaultProps = {
   annotation: null,
   canvases: [],
   closeCompanionWindow: () => {},
+  direction: 'ltr',
+  position: 'right',
 };
 
-export default withStyles(styles)(AnnotationCreation);
+export default AnnotationCreation;

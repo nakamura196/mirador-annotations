@@ -9,89 +9,32 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { MiradorMenuButton } from 'mirador/dist/es/src/components/MiradorMenuButton';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { connect } from 'react-redux';
-import * as actions from 'mirador/dist/es/src/state/actions';
+import { MiradorMenuButton, receiveAnnotation } from 'mirador';
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  Typography,
-  makeStyles,
-  Divider,
-  Menu,
-  MenuItem,
+  AccountCircle as AccountCircleIcon,
+  ExitToApp as ExitToAppIcon,
+} from '@mui/icons-material';
+import { connect } from 'react-redux';
+import {
   Avatar,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
   ListItemIcon,
   ListItemText,
-} from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => ({
-  dialogContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(2),
-    minWidth: 300,
-  },
-  divider: {
-    flex: 1,
-  },
-  dividerContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    margin: theme.spacing(2, 0),
-  },
-  dividerText: {
-    color: theme.palette.text.secondary,
-    margin: theme.spacing(0, 2),
-  },
-  errorText: {
-    color: theme.palette.error.main,
-    marginTop: theme.spacing(1),
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(2),
-  },
-  googleButton: {
-    backgroundColor: '#4285f4',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: '#357ae8',
-    },
-  },
-  menuButton: {
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-    padding: theme.spacing(0.5),
-  },
-  smallAvatar: {
-    height: theme.spacing(3),
-    width: theme.spacing(3),
-  },
-  userInfo: {
-    alignItems: 'center',
-    display: 'flex',
-    gap: theme.spacing(1),
-  },
-}));
+  Menu,
+  MenuItem,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 /**
  * Googleアカウントとメールでの認証を管理するボタンコンポーネント
- * @param {Object} props
- * @param {Array} props.canvases - キャンバスの配列
- * @param {Object} props.config - 設定オブジェクト
- * @param {Function} props.receiveAnnotation - アノテーションを受け取るコールバック
  */
 function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
-  const classes = useStyles();
   const [user, setUser] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
   const [email, setEmail] = useState('');
@@ -122,9 +65,7 @@ function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
     return () => unsubscribe();
   }, [refreshAnnotations]);
 
-  /**
-   * Googleアカウントでログインする
-   */
+  /** Googleアカウントでログインする */
   const handleLogin = () => {
     signInWithPopup(getAuth(), new GoogleAuthProvider())
       .then(() => {
@@ -136,17 +77,13 @@ function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
       });
   };
 
-  /**
-   * ログアウトする
-   */
+  /** ログアウトする */
   const handleLogout = () => {
     signOut(getAuth())
       .catch((err) => console.error('ログアウトエラー:', err));
   };
 
-  /**
-   * メールアドレスでログインまたはサインアップする
-   */
+  /** メールアドレスでログインまたはサインアップする */
   const handleEmailAuth = async (e) => {
     e.preventDefault();
     setError('');
@@ -165,9 +102,7 @@ function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
     }
   };
 
-  /**
-   * ダイアログを閉じる
-   */
+  /** ダイアログを閉じる */
   const handleClose = () => {
     setShowDialog(false);
     setError('');
@@ -175,23 +110,17 @@ function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
     setPassword('');
   };
 
-  /**
-   * ユーザーメニューをクリックする
-   */
+  /** ユーザーメニューをクリックする */
   const handleUserMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  /**
-   * ユーザーメニューを閉じる
-   */
+  /** ユーザーメニューを閉じる */
   const handleUserMenuClose = () => {
     setAnchorEl(null);
   };
 
-  /**
-   * ログアウトする
-   */
+  /** ログアウトする */
   const handleLogoutClick = () => {
     handleLogout();
     handleUserMenuClose();
@@ -203,13 +132,13 @@ function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
         aria-label="User menu"
         onClick={handleUserMenuClick}
         size="small"
-        className={classes.menuButton}
+        sx={{ p: 0.5, '&:hover': { backgroundColor: 'transparent' } }}
       >
-        <div className={classes.userInfo}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Avatar
             src={user.photoURL}
             alt={user.displayName || user.email}
-            className={classes.smallAvatar}
+            sx={{ width: 24, height: 24 }}
           >
             {(user.displayName || user.email || '?')[0].toUpperCase()}
           </Avatar>
@@ -220,7 +149,7 @@ function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleUserMenuClose}
-        getContentAnchorEl={null}
+        disableAutoFocusItem
         anchorOrigin={{
           horizontal: 'right',
           vertical: 'bottom',
@@ -262,24 +191,23 @@ function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
         <DialogTitle id="login-dialog-title">
           {isSignUp ? 'アカウント作成' : 'ログイン'}
         </DialogTitle>
-        <DialogContent className={classes.dialogContent}>
+        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 300 }}>
           <Button
             variant="contained"
-            className={classes.googleButton}
-            // startIcon={<GoogleIcon />}
+            sx={{ backgroundColor: '#4285f4', '&:hover': { backgroundColor: '#357ae8' } }}
             onClick={handleLogin}
             fullWidth
           >
             Googleでログイン
           </Button>
 
-          <div className={classes.dividerContainer}>
-            <Divider className={classes.divider} />
-            <Typography className={classes.dividerText}>または</Typography>
-            <Divider className={classes.divider} />
+          <div style={{ display: 'flex', alignItems: 'center', margin: '16px 0' }}>
+            <Divider sx={{ flex: 1 }} />
+            <Typography sx={{ mx: 2, color: 'text.secondary' }}>または</Typography>
+            <Divider sx={{ flex: 1 }} />
           </div>
 
-          <form onSubmit={handleEmailAuth} className={classes.form}>
+          <form onSubmit={handleEmailAuth} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <TextField
               label="メールアドレス"
               type="email"
@@ -297,7 +225,7 @@ function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
               fullWidth
             />
             {error && (
-              <Typography className={classes.errorText}>
+              <Typography sx={{ color: 'error.main', mt: 1 }}>
                 {error}
               </Typography>
             )}
@@ -338,8 +266,10 @@ GoogleAuthButton.propTypes = {
   receiveAnnotation: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = {
-  receiveAnnotation: actions.receiveAnnotation,
-};
+const mapDispatchToProps = (dispatch) => ({
+  receiveAnnotation: (targetId, id, annotation) => dispatch(
+    receiveAnnotation(targetId, id, annotation),
+  ),
+});
 
 export default connect(null, mapDispatchToProps)(GoogleAuthButton);

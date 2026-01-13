@@ -1,21 +1,14 @@
-import mirador from 'mirador/dist/es/src/index';
+import Mirador from 'mirador';
 import annotationPlugins from '../../src';
-// import LocalStorageAdapter from '../../src/LocalStorageAdapter';
-// import AnnototAdapter from '../../src/AnnototAdapter';
-
-// const endpointUrl = 'http://127.0.0.1:3000/annotations';
 import FirestoreAnnotationAdapter from '../../src/FirestoreAnnotationAdapter';
 
-// URLからmanifestパラメータを取得
+// URL parameter to get manifest
 const urlParams = new URLSearchParams(window.location.search);
-const manifestUrl = urlParams.get('manifest') || 'https://dl.ndl.go.jp/api/iiif/3437686/manifest.json'; // デフォルト値
+const manifestUrl = urlParams.get('manifest') || 'https://dl.ndl.go.jp/api/iiif/3437686/manifest.json';
 
 const config = {
   annotation: {
-    adapter: (canvasId) => {
-      const manifestId = config.windows[0].loadedManifest;
-      return new FirestoreAnnotationAdapter(canvasId, manifestId);
-    },
+    adapter: (canvasId) => new FirestoreAnnotationAdapter(canvasId, manifestUrl),
     exportLocalStorageAnnotations: true,
   },
   id: 'demo',
@@ -24,8 +17,8 @@ const config = {
     sideBarOpenByDefault: true,
   },
   windows: [{
-    loadedManifest: manifestUrl,
+    manifestId: manifestUrl,
   }],
 };
 
-mirador.viewer(config, [...annotationPlugins]);
+Mirador.viewer(config, [...annotationPlugins]);

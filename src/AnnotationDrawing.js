@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { OSDReferences } from 'mirador/dist/es/src/plugins/OSDReferences';
+import { OSDReferences } from 'mirador';
 import { renderWithPaperScope, PaperContainer } from '@psychobolt/react-paperjs';
 import
 {

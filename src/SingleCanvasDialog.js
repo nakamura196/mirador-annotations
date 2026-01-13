@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Typography from '@material-ui/core/Typography';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 
 /**
@@ -40,13 +41,10 @@ class SingleCanvasDialog extends Component {
         fullWidth
         maxWidth="sm"
         onClose={handleClose}
-        onEscapeKeyDown={handleClose}
         open={open}
       >
-        <DialogTitle id="single-canvas-dialog-title" disableTypography>
-          <Typography variant="h2">
-            Switch view type to single view?
-          </Typography>
+        <DialogTitle id="single-canvas-dialog-title">
+          Switch view type to single view?
         </DialogTitle>
         <DialogContent>
           <DialogContentText variant="body1" color="inherit">

@@ -1,22 +1,28 @@
-import * as actions from 'mirador/dist/es/src/state/actions';
-import { getCompanionWindow } from 'mirador/dist/es/src/state/selectors/companionWindows';
-import { getVisibleCanvases } from 'mirador/dist/es/src/state/selectors/canvases';
+import {
+  getCompanionWindow,
+  getVisibleCanvases,
+  getWorkspace,
+  receiveAnnotation,
+  removeCompanionWindow,
+} from 'mirador';
 import AnnotationCreation from '../AnnotationCreation';
 
 /** */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   closeCompanionWindow: () => dispatch(
-    actions.removeCompanionWindow(windowId, id),
+    removeCompanionWindow(windowId, id),
   ),
   receiveAnnotation: (targetId, annoId, annotation) => dispatch(
-    actions.receiveAnnotation(targetId, annoId, annotation),
+    receiveAnnotation(targetId, annoId, annotation),
   ),
 });
 
 /** */
 function mapStateToProps(state, { id: companionWindowId, windowId }) {
-  const { annotationid } = getCompanionWindow(state, { companionWindowId, windowId });
+  const companionWindow = getCompanionWindow(state, { companionWindowId, windowId });
+  const { annotationid, position } = companionWindow || {};
   const canvases = getVisibleCanvases(state, { windowId });
+  const { isWorkspaceControlPanelVisible } = getWorkspace(state) || {};
 
   let annotation;
   canvases.forEach((canvas) => {
@@ -28,10 +34,20 @@ function mapStateToProps(state, { id: companionWindowId, windowId }) {
     });
   });
 
+  // Determine direction based on position
+  let direction = 'ltr';
+  if (position === 'left') {
+    direction = isWorkspaceControlPanelVisible ? 'ltr' : 'ltr';
+  } else if (position === 'right') {
+    direction = 'rtl';
+  }
+
   return {
     annotation,
     canvases,
     config: state.config,
+    direction,
+    position,
   };
 }
 
