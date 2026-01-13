@@ -34,7 +34,7 @@ import {
 /**
  * Googleアカウントとメールでの認証を管理するボタンコンポーネント
  */
-function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
+function GoogleAuthButton({ canvases, config, receiveAnnotation: receiveAnnotationProp }) {
   const [user, setUser] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
   const [email, setEmail] = useState('');
@@ -47,14 +47,14 @@ function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
     if (canvases?.[0]) {
       const storageAdapter = config.annotation.adapter(canvases[0].id);
       storageAdapter?.all().then((annoPage) => {
-        receiveAnnotation(
+        receiveAnnotationProp(
           canvases[0].id,
           storageAdapter.annotationPageId,
           annoPage,
         );
       });
     }
-  }, [canvases, config, receiveAnnotation]);
+  }, [canvases, config, receiveAnnotationProp]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), (newUser) => {
@@ -132,13 +132,13 @@ function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
         aria-label="User menu"
         onClick={handleUserMenuClick}
         size="small"
-        sx={{ p: 0.5, '&:hover': { backgroundColor: 'transparent' } }}
+        sx={{ '&:hover': { backgroundColor: 'transparent' }, p: 0.5 }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ alignItems: 'center', display: 'flex', gap: 8 }}>
           <Avatar
             src={user.photoURL}
             alt={user.displayName || user.email}
-            sx={{ width: 24, height: 24 }}
+            sx={{ height: 24, width: 24 }}
           >
             {(user.displayName || user.email || '?')[0].toUpperCase()}
           </Avatar>
@@ -191,19 +191,22 @@ function GoogleAuthButton({ canvases, config, receiveAnnotation }) {
         <DialogTitle id="login-dialog-title">
           {isSignUp ? 'アカウント作成' : 'ログイン'}
         </DialogTitle>
-        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 300 }}>
+        <DialogContent sx={{
+          display: 'flex', flexDirection: 'column', gap: 2, minWidth: 300,
+        }}
+        >
           <Button
             variant="contained"
-            sx={{ backgroundColor: '#4285f4', '&:hover': { backgroundColor: '#357ae8' } }}
+            sx={{ '&:hover': { backgroundColor: '#357ae8' }, backgroundColor: '#4285f4' }}
             onClick={handleLogin}
             fullWidth
           >
             Googleでログイン
           </Button>
 
-          <div style={{ display: 'flex', alignItems: 'center', margin: '16px 0' }}>
+          <div style={{ alignItems: 'center', display: 'flex', margin: '16px 0' }}>
             <Divider sx={{ flex: 1 }} />
-            <Typography sx={{ mx: 2, color: 'text.secondary' }}>または</Typography>
+            <Typography sx={{ color: 'text.secondary', mx: 2 }}>または</Typography>
             <Divider sx={{ flex: 1 }} />
           </div>
 

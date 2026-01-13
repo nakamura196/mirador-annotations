@@ -68,7 +68,9 @@ class MiradorAnnotation extends Component {
     } = this.props;
     const { annotationExportDialogOpen, singleCanvasDialogOpen } = this.state;
     const storageAdapter = config.annotation && config.annotation.adapter('poke');
-    const offerExportDialog = config.annotation && (storageAdapter instanceof LocalStorageAdapter || storageAdapter instanceof FirestoreAnnotationAdapter)
+    const isLocalOrFirestore = storageAdapter instanceof LocalStorageAdapter
+      || storageAdapter instanceof FirestoreAnnotationAdapter;
+    const offerExportDialog = config.annotation && isLocalOrFirestore
       && config.annotation.exportLocalStorageAnnotations;
     return (
       <div>

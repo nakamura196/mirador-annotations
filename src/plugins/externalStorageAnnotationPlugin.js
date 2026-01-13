@@ -29,13 +29,13 @@ class ExternalStorageAnnotation extends Component {
 
   /** */
   retrieveAnnotations(canvases) {
-    const { config, receiveAnnotation } = this.props;
+    const { config, receiveAnnotation: receiveAnnotationProp } = this.props;
 
     canvases.forEach((canvas) => {
       const storageAdapter = config.annotation.adapter(canvas.id);
       storageAdapter.all().then((annoPage) => {
         if (annoPage) {
-          receiveAnnotation(canvas.id, storageAdapter.annotationPageId, annoPage);
+          receiveAnnotationProp(canvas.id, storageAdapter.annotationPageId, annoPage);
         }
       });
     });

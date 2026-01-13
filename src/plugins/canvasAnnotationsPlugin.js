@@ -43,6 +43,7 @@ class CanvasAnnotationsWrapper extends Component {
     };
     return (
       <AnnotationActionsContext.Provider
+        // eslint-disable-next-line react/jsx-no-constructed-context-values
         value={{
           addCompanionWindow: addWindow,
           annotationsOnCanvases,

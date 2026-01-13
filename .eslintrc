@@ -1,4 +1,5 @@
 {
+  "ignorePatterns": ["dist/**", "node_modules/**", "__tests__/**"],
   "parserOptions": {
     "ecmaVersion": 2022,
     "sourceType": "module",

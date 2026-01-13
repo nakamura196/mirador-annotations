@@ -89,7 +89,7 @@ class TextEditor extends Component {
           onClick={this.handleFocus}
           sx={{
             border: 1,
-            borderColor: (theme) => theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)',
+            borderColor: (theme) => (theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'),
             borderRadius: 1,
             fontFamily: 'inherit',
             mb: 1,

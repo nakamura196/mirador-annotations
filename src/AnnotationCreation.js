@@ -249,7 +249,12 @@ class AnnotationCreation extends Component {
           updateGeometry={this.updateGeometry}
           windowId={windowId}
         />
-        <form onSubmit={this.submitForm} style={{ paddingBottom: 8, paddingLeft: 16, paddingRight: 8, paddingTop: 16 }}>
+        <form
+          onSubmit={this.submitForm}
+          style={{
+            paddingBottom: 8, paddingLeft: 16, paddingRight: 8, paddingTop: 16,
+          }}
+        >
           <Grid container>
             <Grid size={12}>
               <Typography variant="overline">
@@ -259,7 +264,7 @@ class AnnotationCreation extends Component {
             <Grid size={12}>
               <Paper elevation={0} sx={{ display: 'flex', flexWrap: 'wrap' }}>
                 <ToggleButtonGroup
-                  sx={{ border: 'none', m: 0.5, '& .MuiToggleButtonGroup-grouped': { borderRadius: 1 } }}
+                  sx={{ '& .MuiToggleButtonGroup-grouped': { borderRadius: 1 }, border: 'none', m: 0.5 }}
                   value={activeTool}
                   exclusive
                   onChange={this.changeTool}
@@ -275,7 +280,7 @@ class AnnotationCreation extends Component {
                 </ToggleButtonGroup>
                 <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
                 <ToggleButtonGroup
-                  sx={{ border: 'none', m: 0.5, '& .MuiToggleButtonGroup-grouped': { borderRadius: 1 } }}
+                  sx={{ '& .MuiToggleButtonGroup-grouped': { borderRadius: 1 }, border: 'none', m: 0.5 }}
                   value={activeTool}
                   exclusive
                   onChange={this.changeTool}
@@ -428,8 +433,8 @@ AnnotationCreation.propTypes = {
       adapter: PropTypes.func,
       defaults: PropTypes.objectOf(
         PropTypes.oneOfType(
-          [PropTypes.bool, PropTypes.func, PropTypes.number, PropTypes.string]
-        )
+          [PropTypes.bool, PropTypes.func, PropTypes.number, PropTypes.string],
+        ),
       ),
     }),
   }).isRequired,
